@@ -1,9 +1,9 @@
-interface IProductList {
+ interface IProductList {
 	total:number
 	items?:Array<IProduct>
 }
 
-interface IProduct {
+export interface IProduct {
 	id: string
 	description: string
 	image: string
@@ -12,7 +12,7 @@ interface IProduct {
 	price: number | null
 }
 
-interface IOrderForm {
+export interface IOrderForm {
 	payment: string
 	address: string
 	email: string
@@ -20,11 +20,11 @@ interface IOrderForm {
 	total:number
 }
 
-interface IOrderResult {
+export interface IOrderResult {
 	id:string
 	total:number
 }
 
-interface IError {
-	error:string
-}
+export interface IActions {
+	 onClick: (event: MouseEvent) => void;
+ }

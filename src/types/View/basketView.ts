@@ -1,3 +1,6 @@
+import { IEvents } from '../../components/base/events';
+import { createElement } from '../../utils/utils';
+
 interface IBasket {
 	basket: HTMLElement
 	basketTitle: HTMLElement
@@ -7,4 +10,3 @@ interface IBasket {
 	displayBasket():HTMLElement
 	displayBasketCount(value: number): void
 	displayBasketSum(sum: number): void
-}
