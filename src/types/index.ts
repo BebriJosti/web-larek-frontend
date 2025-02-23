@@ -1,8 +1,3 @@
- interface IProductList {
-	total:number
-	items?:Array<IProduct>
-}
-
 export interface IProduct {
 	id: string
 	description: string
