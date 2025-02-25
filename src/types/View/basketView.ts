@@ -8,10 +8,11 @@ interface IBasket {
 	basketButton: HTMLButtonElement
 	basketPrice: HTMLElement
 	displayBasket():HTMLElement
-	displayBasketCount(value: number): void
 	displayBasketSum(sum: number): void
-	basketHeaderCounter: HTMLElement
-	basketHeaderButton: HTMLButtonElement
+
+	// basketHeaderCounter: HTMLElement
+	// basketHeaderButton: HTMLButtonElement
+	// displayBasketCount(value: number): void
 }
 
 export class Basket implements IBasket {
@@ -20,8 +21,9 @@ export class Basket implements IBasket {
 	basketList: HTMLElement
 	basketButton: HTMLButtonElement
 	basketPrice: HTMLElement
-	basketHeaderCounter: HTMLElement
-	basketHeaderButton: HTMLButtonElement
+
+	// basketHeaderCounter: HTMLElement
+	// basketHeaderButton: HTMLButtonElement
 
 	constructor(template: HTMLTemplateElement, protected events: IEvents) {
 		this.basket = template.content.querySelector(".basket").cloneNode(true) as HTMLElement
@@ -29,13 +31,16 @@ export class Basket implements IBasket {
 		this.basketList = this.basket.querySelector(".basket__list")
 		this.basketPrice = this.basket.querySelector('.basket__price')
 		this.basketButton = this.basket.querySelector(".basket__button")
-		this.basketHeaderCounter = document.querySelector(".header__basket-counter")
-		this.basketHeaderButton = document.querySelector(".header__basket")
+
+		// this.basketHeaderCounter = document.querySelector(".header__basket-counter")
+		// this.basketHeaderButton = document.querySelector(".header__basket")
+		//
+		// this.basketHeaderButton.addEventListener('click', () => {
+		// 	this.events.emit('basket:open') })
 
 		this.basketButton.addEventListener('click', () => {
 			this.events.emit('order:open') })
-		this.basketHeaderButton.addEventListener('click', () => {
-			this.events.emit('basket:open') })
+
 
 		this.basketItems = []
 
@@ -53,9 +58,9 @@ export class Basket implements IBasket {
 		}
 	}
 
-	displayBasketCount(value: number) {
-		this.basketHeaderCounter.textContent = `${value}`
-	}
+	// displayBasketCount(value: number) {
+	// 	this.basketHeaderCounter.textContent = `${value}`
+	// }
 
 	displayBasketSum(sum: number) {
 		this.basketPrice.textContent = `${sum} синапсов`
@@ -66,5 +71,4 @@ export class Basket implements IBasket {
 		return this.basket
 	}
 }
-
 

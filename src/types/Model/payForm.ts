@@ -1,5 +1,6 @@
 import { IOrderForm } from '../index';
 import { IEvents } from '../../components/base/events';
+import { BasketModel } from './basket';
 
 type FormErrors = Partial<Record<keyof IOrderForm, string>>
 
@@ -20,17 +21,14 @@ export class PayForm implements IPayForm {
 	email: string
 	phone: string
 	address: string
-	total: number
-	items: string[]
 	formErrors: FormErrors = {}
 
-	constructor(protected events: IEvents) {
+
+	constructor(protected events: IEvents, protected basket: BasketModel) {
 		this.payment = ''
 		this.email = ''
 		this.phone = ''
 		this.address = ''
-		this.total = 0
-		this.items = []
 	}
 
 	setAddress(field: string, value: string) {
@@ -103,8 +101,8 @@ export class PayForm implements IPayForm {
 			email: this.email,
 			phone: this.phone,
 			address: this.address,
-			total: this.total,
-			items: this.items,
+			total: this.basket.totalPriceProducts(),
+			items: this.basket.basketItems.map(item => item.id),
 		};
 	}
 

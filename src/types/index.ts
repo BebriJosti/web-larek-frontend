@@ -12,7 +12,6 @@ export interface IOrderForm {
 	address: string
 	email: string
 	phone: number | string
-	total:number
 }
 
 export interface IOrderResult {

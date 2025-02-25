@@ -9,11 +9,11 @@ import { IOrderForm, IProduct } from './types';
 import { Modal } from './types/View/modal';
 import { Basket } from './types/View/basketView';
 import { BasketModel } from './types/Model/basket';
-import { BasketItem } from './types/View/basketItem';
 import { Order } from './types/View/order';
 import { PayForm } from './types/Model/payForm';
 import { ContactInfo } from './types/View/contactInfo';
 import { Success } from './types/View/success';
+import { BasketItem } from './types/View/basketItem';
 
 const cardCatalogTemplate = document.querySelector('#card-catalog') as HTMLTemplateElement
 const cardPreviewTemplate = document.querySelector('#card-preview') as HTMLTemplateElement
@@ -29,7 +29,7 @@ const cardsModel = new CardsModel(events)
 const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events)
 const basketModel = new BasketModel()
 const basket = new Basket(basketTemplate, events)
-const payForm = new PayForm(events)
+const payForm = new PayForm(events, basketModel)
 const order = new Order(orderTemplate, events)
 const contacts = new ContactInfo(contactsTemplate, events)
 const success = new Success(successTemplate, events)
@@ -43,7 +43,9 @@ apiModel.getCardList()
 events.on('products:obtain', () => {
 	cardsModel.productCards.forEach(item => {
 		const card = new Card(cardCatalogTemplate, events,
-			{ onClick: () => events.emit('product:select', item) })
+			{ onClick: () => events.emit('product:select', item) }
+		)
+		card.displayBasketCount(basketModel.basketCounter())
 		ensureElement('.gallery').append(card.displayCard(item))
 	})
 })
@@ -60,9 +62,15 @@ events.on('modalCard:open', (item: IProduct) => {
 
 events.on('basket:add', () => {
 	basketModel.addProductToBasket(cardsModel.clickedCard)
-	basket.displayBasketCount(basketModel.basketCounter())
 	modal.close()
-});
+})
+
+events.on('basket:itemRemove', (item: IProduct) => {
+	basketModel.removeProductToBasket(item)
+	basket.displayBasketSum(basketModel.totalPriceProducts())
+
+	events.emit('basket:open')
+})
 
 events.on('basket:open', () => {
 	const totalPrice = basketModel.totalPriceProducts()
@@ -81,18 +89,9 @@ events.on('basket:open', () => {
 	modal.render()
 })
 
-events.on('basket:itemRemove', (item: IProduct) => {
-	basketModel.removeProductToBasket(item)
-	basket.displayBasketCount(basketModel.basketCounter())
-	basket.displayBasketSum(basketModel.totalPriceProducts())
-
-	events.emit('basket:open')
-});
-
 events.on('order:open', () => {
 	modal.content = order.displayOrder()
 	modal.render()
-	payForm.items = basketModel.basketItems.map(item => item.id)
 })
 
 events.on('order:payment', (button: HTMLButtonElement) => {
@@ -105,14 +104,15 @@ events.on('order:changeAddress', (data: { field: string, value: string }) => {
 
 events.on('formErrors:address', (errors: Partial<IOrderForm>) => {
 	const { address, payment } = errors
-	order.valid = !address && !payment
-	order.formErrors.textContent = Object.values({address, payment})
+	const isValid = !address && !payment
+	order.setValid(isValid)
+	const errorMessages = Object.values({ address, payment })
 		.filter(i => !!i)
-		.join(', ')
+		.join(', ');
+	order.setFormErrors(errorMessages);
 })
 
 events.on('contacts:open', () => {
-	payForm.total = basketModel.totalPriceProducts()
 	modal.content = contacts.displayContact()
 	modal.render()
 })
@@ -134,7 +134,7 @@ events.on('success:open', () => {
 		.then(() => {
 			modal.content = success.displaySuccess(basketModel.totalPriceProducts())
 			basketModel.clearBasket()
-			basket.displayBasketCount(basketModel.basketCounter())
+			// basket.displayBasketCount(basketModel.basketCounter())
 			modal.render()
 		})
 		.catch(error => console.log(error))

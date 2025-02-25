@@ -4,7 +4,9 @@ interface IOrder  {
 	 orderForm: HTMLFormElement
 	 orderButtons: HTMLButtonElement[]
 	 displayOrder(): HTMLElement
-	 paymentChoice:string
+	 setPaymentChoice(paymentMethod: string): void
+	 setValid(value: boolean): void
+	 setFormErrors(errors: string): void
 }
 
 export class Order implements IOrder {
@@ -12,7 +14,7 @@ export class Order implements IOrder {
 	orderButtons: HTMLButtonElement[]
 	buttonSubmit: HTMLButtonElement
 	formErrors: HTMLElement
-	private _paymentChoice: string | null = null
+
 
 	constructor(template: HTMLTemplateElement, protected events: IEvents) {
 		this.orderForm = template.content.querySelector('.form').cloneNode(true) as HTMLFormElement
@@ -22,37 +24,36 @@ export class Order implements IOrder {
 
 		this.orderButtons.forEach(item => {
 			item.addEventListener('click', () => {
-				this.paymentChoice = item.name
+				this.setPaymentChoice(item.name)
 				events.emit('order:payment', item)
-			})
-		})
+			});
+		});
 
 		this.orderForm.addEventListener('input', (event: Event) => {
 			const target = event.target as HTMLInputElement
-			const field = target.name;
-			const value = target.value;
+			const field = target.name
+			const value = target.value
 			this.events.emit('order:changeAddress', { field, value })
 		})
 
 		this.orderForm.addEventListener('submit', (event: Event) => {
-			event.preventDefault();
-			this.events.emit('contacts:open');
+			event.preventDefault()
+			this.events.emit('contacts:open')
 		})
 	}
 
-	get paymentChoice(): string {
-		return this._paymentChoice
-	}
-
-	set paymentChoice(paymentMethod: string) {
-		this._paymentChoice = paymentMethod
+	setPaymentChoice(paymentMethod: string) {
 		this.orderButtons.forEach(item => {
 			item.classList.toggle('button_alt-active', item.name === paymentMethod)
-		})
+		});
 	}
 
-	set valid(value: boolean) {
+	setValid(value: boolean) {
 		this.buttonSubmit.disabled = !value
+	}
+
+	setFormErrors(errors: string) {
+		this.formErrors.textContent = errors
 	}
 
 	displayOrder() {

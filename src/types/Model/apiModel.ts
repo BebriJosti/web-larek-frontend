@@ -2,13 +2,11 @@ import { Api, ApiListResponse } from '../../components/base/api'
 import { IOrderForm, IOrderResult, IProduct } from '../index';
 
 interface IApiModel {
-	items: IProduct[]
 	getCardList: () => Promise<IProduct[]>
 	postOrder: (order: IProduct) => Promise<IOrderResult>
 }
 
  export class ApiModel extends Api {
-	items: IProduct[]
 	 cdn: string
 
 	constructor(baseUrl: string, cdn:string, options?: RequestInit) {
