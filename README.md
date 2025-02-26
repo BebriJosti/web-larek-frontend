@@ -79,102 +79,131 @@ yarn build
 - total:number
 
 ## Интерфейс IBasketModel
-Интерфейс, описывающий коллекцию карточек в корзине.
-Включает массив объектов, методы для получения и удаления объектов в корзине,
-очищение корзины и подсчёта товара с его общей стоимостью
-
-- basketItems: IProduct[]
-- addProductToBasket(data: IProduct): void
-- removeProductToBasket(item: IProduct): void
-- clearBasket(): void
-- basketCounter(): number
-- totalPriceProducts(): number
-
-## Интерфейс IHeader
-Определяет структуру и методы для компонента шапки, необходимые для взаимодействия 
-с элементами корзины
+Описывает структуру и методы, необходимые для управления корзиной товаров.
 
 ### Поля:
+- basketItems: IProduct[] - Массив товаров, находящихся в корзине. Каждый элемент массива должен соответствовать интерфейсу IProduct.
 
-- basketHeaderButton: HTMLButtonElement - кнопка в шапке которая открывает корзину
-- basketHeaderCounter: HTMLElement - элемент отображающий количество товаров в корзине
+### Методы:
+- addProductToBasket(data: IProduct): void - Добавляет товар в корзину. data представляет собой объект типа IProduct, который необходимо добавить.
+- removeProductToBasket(item: IProduct): void - Удаляет товар из корзины. item представляет собой объект типа IProduct, который необходимо удалить.
+- clearBasket(): void - Полностью очищает корзину, удаляя все товары.
+- basketCounter(): number - Возвращает количество товаров в корзине.
+- totalPriceProducts(): number - Возвращает общую стоимость всех товаров в корзине.
+- 
 
-### Метод:
+## Интерфейс ICardsModel
 
-- displayBasketCount(value: number): void - обновляет счетчик корзины отображая заданное значение
+Описывает структуру данных и методы для управления списком карточек товаров.
 
-## Интерфейс ICard
-Определяет структуру карточки продукта.
+### Поля:
+- productCards: IProduct[] - Массив карточек товаров, где каждый элемент является объектом IProduct.
+- clickedCard: IProduct | null - Объект IProduct, представляющий выбранную карточку товара для отображения в модальном окне предпросмотра. Может быть null, если ни одна карточка не выбрана.
 
-### Поля
-- cardCategory: string — категория карточки.
+### Методы:
+- setPreview(item: IProduct): void - Устанавливает выбранную карточку товара для предпросмотра и запускает событие modalCard:open.
 
-### Методы
+## Интерфейс IPayForm
 
-- displayCard(data: IProduct): HTMLElement — отображает карточку на основе переданных данных о продукте.
-- setPrice(value: number | null): string — форматирует цену в виде строки.
+Расширяет интерфейс IOrderForm и определяет структуру данных и методы для работы с формой оформления заказа и оплаты.
+
+### Поля:
+Наследует поля от IOrderForm. Включает:
+
+- payment: string - Способ оплаты, выбранный пользователем.
+- email: string - Адрес электронной почты пользователя.
+- phone: string - Номер телефона пользователя.
+- address: string - Адрес доставки заказа.
+- formErrors: FormErrors - Объект, содержащий ошибки валидации полей формы.
+
+### Методы:
+- validateOrder(): boolean - Проверяет валидность полей, связанных с заказом (адрес и способ оплаты).
+- validateContactInfo(): boolean - Проверяет валидность контактной информации (email и телефон).
+- setAddress(field: string, value: string): void - Устанавливает значение поля адреса.
+- setContact(field: string, value: string): void - Устанавливает значение контактного поля (email или телефон).
+- getPurchasedOrder(): object -  Формирует объект с информацией о заказе, готовый к отправке.
 
 ## Интерфейс IBasket
-Определяет структуру корзины покупок.
+Описывает структуру и методы для представления и управления отображением корзины.
 
 ### Поля:
-- basket: HTMLElement —  элемент корзины.
-- basketTitle: HTMLElement — заголовок корзины.
-- basketList: HTMLElement — список товаров в корзине.
-- basketButton: HTMLButtonElement — кнопка оформления заказа.
-- basketPrice: HTMLElement — элемент с суммой заказа.
+- basket: HTMLElement - Элемент представляющий контейнер корзины.
+- basketTitle: HTMLElement - Элемент отображающий заголовок корзины.
+- basketList: HTMLElement - Элемент содержащий список товаров в корзине.
+- basketButton: HTMLButtonElement - Кнопка для перехода к оформлению заказа.
+- basketPrice: HTMLElement - Элемент отображающий общую стоимость товаров в корзине.
 
 ### Методы:
-- displayBasket(): HTMLElement — отображает корзину.
-- displayBasketSum(sum: number): void — обновляет сумму заказа.
+- displayBasket(items: HTMLElement[]): HTMLElement - Отображает список товаров в корзине. 
+- displayBasketSum(sum: number): void - Отображает общую сумму товаров в корзине. 
 
-## Интерфейс IBasketItem
- Описывает структуру и методы, необходимые для управления корзиной товаров.
+## Интерфейс IHeader
+Описывает структуру данных и методы для управления отображением шапки страницы, содержащей информацию о корзине.
 
 ### Поля:
-- basketItem: HTMLElement — контейнер элемента корзины.
-- index: HTMLElement — индекс товара в списке.
-- title: HTMLElement — заголовок товара.
-- price: HTMLElement — цена товара.
-- buttonDelete: HTMLButtonElement — кнопка удаления товара из корзины.
+- basketHeaderButton: HTMLButtonElement - Кнопка в шапке для открытия корзины.
+- basketHeaderCounter: HTMLElement - Элемент отображающий количество товаров в корзине.
 
 ### Методы:
-- displayBasketItem(data: IProduct, item: number): HTMLElement — заполняет элемент 
-корзины данными о продукте и его порядковым номером.
+- displayBasketCount(value: number): void - Отображает количество товаров в корзине.
 
-## Интерфейс IOrder
-Определяет структуру заказа.
+## Интерфейс ICard
+Определяет интерфейс для отображения карточки товара.
 
-### Поля:
-- orderForm: HTMLFormElement — форма заказа.
-- orderButtons: HTMLButtonElement[] — кнопки выбора способа оплаты.
-- paymentChoice: string — выбранный способ оплаты.
-
-### Метод:
-- displayOrder(): HTMLElement — отображает форму заказа.
+### Методы:
+- displayCard(data: IProduct): HTMLElement - Отображает информацию о продукте в карточке.
 
 ## Интерфейс IContactInfo
-Определяет структуру формы контактной информации.
+Описывает структуру данных и методы для управления отображением формы контактной информации.
 
 ### Поля:
-- contactForm: HTMLFormElement — форма для ввода контактной информации.
-- contactInputs: HTMLInputElement[] — массив полей ввода.
-- contactButton: HTMLButtonElement — кнопка отправки формы.
-- contactFormErrors: HTMLElement — контейнер для отображения ошибок.
+- contactForm: HTMLFormElement - Элемент представляющий форму контактной информации.
+- contactInputs: HTMLInputElement[] - Массив элементов представляющих поля ввода в форме.
+- contactButton: HTMLButtonElement - Элемент представляющий кнопку отправки формы.
+- contactFormErrors: HTMLElement - Элемент отображающий ошибки валидации формы.
+- displayContact(): HTMLElement - Метод отображения контактной формы.
+- setValid(value: boolean): void - Метод для установки валидности кнопки отправки формы.
+- setFormErrors(value: string): void - Метод для установки текста ошибок валидации формы.
 
-### Метод:
-- displayContact(): HTMLElement — отображает форму контактов.
+### Методы:
+- displayContact(): HTMLElement - Возвращает элемент контактной формы.
+- setValid(value: boolean): void - Устанавливает атрибут disabled для кнопки отправки формы в зависимости от значения value. 
+- setFormErrors(value: string): void - Устанавливает текст для элемента отображающего ошибки валидации формы.
+
+## Интерфейс IOrder
+Описывает структуру данных и методы для управления отображением формы оформления заказа.
+
+### Поля:
+- orderForm: HTMLFormElement - Элемент представляющий форму оформления заказа.
+- orderButtons: HTMLButtonElement[] - Массив элементов представляющих кнопки выбора способа оплаты.
+- displayOrder(): HTMLElement - Метод отображения формы оформления заказа.
+- setPaymentChoice(paymentMethod: string): void - Метод для выбора способа оплаты.
+- setValid(value: boolean): void - Метод для установки валидности кнопки отправки заказа.
+- setFormErrors(errors: string): void - Метод для установки текста ошибок валидации формы.
+
+### Методы:
+- displayOrder(): HTMLElement - Возвращает элемент формы оформления заказа.
+- setPaymentChoice(paymentMethod: string): void - Активирует кнопку выбранного способа оплаты и деактивирует остальные, отправляет событие order:payment с выбранным способом оплаты.
+- setValid(value: boolean): void - Устанавливает атрибут disabled для кнопки отправки заказа в зависимости от значения value. Если value равно true, кнопка активна, иначе - заблокирована.
+- setFormErrors(errors: string): void - Устанавливает текст для элемента, отображающего ошибки валидации формы.
 
 ## Интерфейс ISuccess
-Определяет структуру успешного завершения заказа.
+Описывает структуру данных и методы для управления отображением окна подтверждения успешного оформления заказа.
 
 ### Поля:
-- success: HTMLElement — контейнер сообщения об успешном заказе.
-- successText: HTMLElement — текстовое описание успешного заказа.
-- button: HTMLButtonElement — кнопка закрытия.
+- success: HTMLElement - Элемент представляющий контейнер окна подтверждения успешного оформления заказа.
+- successText: HTMLElement - Элемент отображающий текст сообщения об успешном списании средств.
+- button: HTMLButtonElement - Элемент представляющий кнопку закрытия окна.
+- displaySuccess(total: number): HTMLElement - Метод для отображения окна подтверждения успешного оформления заказа.
 
-#### Метод:
-- displaySuccess(total: number): HTMLElement — отображает сообщение об успешной оплате с указанной суммой.
+### Методы:
+- displaySuccess(total: number): HTMLElement - Отображает окно успешного оформления заказа. Принимает общую сумму списанных средств и подставляет ее в текст сообщения. 
+
+## Интерфейс IModalData
+Описывает структуру данных, необходимых для отображения модального окна.
+
+### Поля:
+- content: HTMLElement - Элемент который будет отображаться внутри модального окна.
 
 # Базовые классы:
 
@@ -226,331 +255,385 @@ constructor(baseUrl: string, cdn: string, options?: RequestInit)
 - postOrder(order: IOrderForm): Promise<IOrderResult> - Отправляет заказ на сервер.
 
 ## BasketModel  
-Класс BasketModel реализует интерфейс IBasketModel и предназначен для управления данными
-корзины покупок. Он предоставляет методы для добавления, удаления и очистки товаров в корзине,
-а также для получения количества товаров и общей стоимости товаров в корзине.
+Реализует интерфейс IBasketModel. Представляет модель корзины товаров.
+
+Конструктор:
+
+constructor(events: IEvents)
+
+- events: IEvents - объект для управления событиями
 
 ### Поля:
 - basketItems: IProduct[] - массив карточек товара
 
-### Методы класса:
+### Методы:
 
-- addProductToBasket(data: IProduct):void - Добавляет товар в корзину
-- removeProductToBasket(item: IProduct):void - Удаляет товар из корзины
-- clearBasket():void - Очищает корзину
-- basketCounter():number - Считает количество товара в корзине
-- totalPriceProducts():number - Считает общую стоимость товара корзине
-- get basketItems(): IProduct[] - Геттер для получения массива товаров в корзине
-- set basketItems(arr: IProduct[]) - Сеттер для установки массива товаров в корзине.
+- get basketItems(): IProduct[] - Геттер для получения массива товаров в корзине.
+- set basketItems(arr: IProduct[]): void - Сеттер для установки массива товаров в корзине. При установке вызывает 
+  событие 'basket:changed' для уведомления об изменениях.
+- addProductToBasket(data: IProduct): void - Добавляет товар в корзину. Добавляет товар в массив _basketItems и 
+  вызывает событие 'basket:changed'.
+- removeProductToBasket(item: IProduct): void - Удаляет товар из корзины. Находит индекс товара по id и удаляет его 
+  из массива _basketItems. Вызывает событие 'basket:changed'.
+- basketCounter(): number - Возвращает количество товаров в корзине. Возвращает длину массива basketItems.
+- totalPriceProducts(): number - Возвращает общую стоимость всех товаров в корзине. Использует метод reduce для 
+  суммирования цен всех товаров.
+- clearBasket(): void - Полностью очищает корзину. Устанавливает _basketItems в пустой массив и вызывает событие 
+  'basket:changed'.
 
-## CardsModel
-Этот класс отвечает за получение и сохранение данных продукта с сервера,
-конструктор принимает инстант брокера сообщений
 
-### Поля класса:
-
-- productCards: IProduct[] - массиов объектов товара
-- clickedCard: IProduct | null - выбранный твоар 
-
-### Методы класа:
-- get productCards(): IProduct[] - возвращает массив объектов
-- set productCards(arr: IProduct[]) - подписывает массив объектов на событие 
-- setPreview(item: IProduct):void - получает данные карточки на которую кликнул пользователь
-
-## PayForm
-Данный класс отвечает за хранение информации и логику работы с данными заказа и валидацию формы
+## Класс CardsModel
+Реализует интерфейс ICardsModel. Представляет модель списка карточек товаров.
 
 Конструктор:
 
-constructor(protected events: IEvents, protected basket: BasketModel)
+constructor(events: IEvents)
 
-- events - объект для управления событиями
-- basket - объект представляющий корзину товаров
-
-### Поля класса:
-- payment: string - Выбранный способ оплаты.
-- email: string - Адрес электронной почты пользователя.
-- phone: string - Номер телефона пользователя.
-- address: string - Адрес доставки заказа.
-- formErrors: FormErrors = {} - объект, содержащий ошибки валидации формы. Ключи - имена полей, значения 
-сообщения об ошибках.
-
-### Методы класа:
-- validateOrder(): boolean - валидация адреса и выбора оплаты
-- validateContactInfo(): boolean - валидация контактной информации 
-- setAddress(field: string, value: string): void - устанавливает адресс пользователя
-- setContact(field: string, value: string): void - устанавливает контактные данные пользователя 
-- getPurchasedOrder(): object - возвращает объект данных пользователя с выбранными товарами
-
-# View:
-
-## Header
-Реализует интерфейса IHeader.  Представляет кнопку корзины и счетчик в шапке
-Конструктор:
-
-constructor(protected events:IEvents)
-
-- events — объект управления событиями.
+- events: IEvents - объект для управления событиями
 
 ### Поля:
 
-- basketHeaderButton: HTMLButtonElement - кнопка в шапке которая открывает корзину
-- basketHeaderCounter: HTMLElement - элемент отображающий количество товаров в корзине
+- _productCards: IProduct[] -  свойство содержащее массив карточек товаров.
+- clickedCard: IProduct | null - объект представляющий выбранную карточку товара. 
 
-### Метод:
+### Методы:
 
-- displayBasketCount(value: number): void - обновляет счетчик корзины отображая заданное значение
+- get productCards(): IProduct[] - Геттер для получения массива карточек товаров 
+- set productCards(arr: IProduct[]): void - Сеттер для установки массива карточек товаров. При установке массива, вызывает событие products:changed для уведомления об изменениях.
+- setPreview(item: IProduct): void - Устанавливает выбранную карточку товара для предпросмотра. 
 
-## Card
-Реализует интерфейс ICard. Представляет базовую карточку товара.
+## Класс PayForm
+
+Реализует интерфейс IPayForm.  Представляет модель формы оформления заказа и оплаты.
+
+Конструктор:
+
+constructor(events: IEvents, basket: BasketModel)
+
+- events: IEvents - объект для управления событиями
+- basket: BasketModel - Объект класса BasketModel, представляющий корзину товаров.
+
+### Поля:
+
+- payment: string - Способ оплаты, выбранный пользователем. 
+- email: string - Адрес электронной почты пользователя. 
+- phone: string - Номер телефона пользователя. 
+- address: string - Адрес доставки заказа. 
+- formErrors: FormErrors - Объект, содержащий ошибки валидации полей формы. 
+
+### Методы:
+
+- setAddress(field: string, value: string): void - Устанавливает значение поля адреса.Если адрес валиден, вызывает emitOrderReady.
+- validateOrder(): boolean - Проверяет валидность полей адреса и способа оплаты. Устанавливает ошибки в formErrors и публикует событие formErrors:changed. 
+- setContact(field: string, value: string): void - Устанавливает значение поля email или phone. Если контактная информация валидна, вызывает emitOrderReady.
+- validateContactInfo(): boolean - Проверяет валидность полей email и phone. Устанавливает ошибки в formErrors и публикует событие formErrors:changed. 
+- getPurchasedOrder(): object -  Формирует объект с информацией о заказе, готовый к отправке.  
+- private emitOrderReady(): void - Публикует событие order:ready с данными о заказе, полученными из getPurchasedOrder().
+
+## Класс Basket
+Реализует интерфейс IBasket. Представляет визуальное отображение корзины товаров.
+
+Конструктор:
+
+constructor(template: HTMLTemplateElement, events: IEvents)
+
+- template: HTMLTemplateElement - HTML-шаблон для создания структуры корзины.
+- events: IEvents - объект для управления событиями
+
+### Поля:
+- basket: HTMLElement - Корневой элемент представляющий контейнер корзины. Создается клонированием элемента из template.
+- basketTitle: HTMLElement - Элемент отображающий заголовок корзины. Получается из basket.
+- basketList: HTMLElement - Элемент содержащий список товаров в корзине. Получается из basket.
+- basketButton: HTMLButtonElement - Кнопка для перехода к оформлению заказа. Получается из basket. Подписывается на событие click, которое вызывает событие order:open.
+- basketPrice: HTMLElement - Элемент отображающий общую стоимость товаров в корзине. Получается из basket.
+
+### Методы:
+- displayBasket(items: HTMLElement[]): HTMLElement - Отображает список товаров в корзине.
+- displayBasketSum(sum: number): void - Отображает общую сумму товаров в корзине. 
+
+## Класс Header
+Реализует интерфейс IHeader. Представляет шапку страницы с информацией о корзине.
+
+Конструктор:
+
+constructor(events: IEvents)
+
+- events: IEvents - объект для управления событиями
+
+### Поля:
+- basketHeaderButton: HTMLButtonElement - Кнопка в шапке для открытия корзины. Подписывается на событие click, которое вызывает событие basket:open.
+- basketHeaderCounter: HTMLElement - Элемент отображающий количество товаров в корзине. 
+
+### Методы:
+- displayBasketCount(value: number): void - Отображает количество товаров в корзине в шапке. 
+
+## Класс ProductView
+Базовый класс для представления отображения информации о продукте.
+
 Конструктор:
 
 constructor(template: HTMLTemplateElement, events: IEvents, actions?: IActions)
 
-- template — HTML-шаблон карточки.
-- events — объект управления событиями.
-- actions — объект, содержащий обработчики событий.
-
+- template: HTMLTemplateElement - HTML-шаблон для создания структуры карточки товара.
+- events: IEvents - объект для управления событиями
+- actions: IActions (optional) - объект содержащий обработчики событий.
 
 ### Поля:
-
-- _cardElement: HTMLElement —  элемент карточки.
-- _cardCategory: HTMLElement — элемент с категорией товара.
-- _cardTitle: HTMLElement — заголовок карточки.
-- _cardImage: HTMLImageElement — картинка карточки.
-- _cardPrice: HTMLElement — элемент с ценой.
-- _cardDescription: Map<string, string> — описание карточки
-
-### Методы класа:
-
-- setCategory(value: string):void — задаёт категорию карточки.
-- setPrice(value: number | null): string — возвращает отформатированную цену (бесценно если null).
-- displayCard(data: IProduct): HTMLElement — заполняет карточку данными и возвращает её элемент.
-
-## Basket
-Реализует интерфейс IBasket. Представляет отображение корзины покупок.
-
- Конструктор:
-
-constructor(template: HTMLTemplateElement, events: IEvents)
-
-- template — HTML-шаблон корзины.
-- events — объект управления событиями.
-
-### Свойства:
-- basket: HTMLElement —  элемент корзины.
-- basketTitle: HTMLElement — заголовок корзины.
-- basketList: HTMLElement — список товаров.
-- basketButton: HTMLButtonElement — кнопка оформления заказа.
-- basketPrice: HTMLElement — элемент с итоговой суммой заказа.
-- basketHeaderCounter: HTMLElement — счётчик товаров в корзине.
-- basketHeaderButton: HTMLButtonElement — кнопка открытия корзины.
+- _element: HTMLElement -элемент для представления карточки товара. 
+- _title: HTMLElement - элемент отображающий название товара. 
+- _price: HTMLElement - элемент отображающий цену товара. 
 
 ### Методы:
-- set basketItems(items: HTMLElement[]) — обновляет список товаров в корзине и управляет состоянием кнопки оформления.
-- displayBasketCount(value: number) — обновляет отображение количества товаров в корзине.
-- displayBasketSum(sum: number) — обновляет отображение общей суммы заказа.
-- displayBasket(): HTMLElement — отображает корзину.
+
+- protected setPrice(value: number | null): string - Преобразует числовое значение цены в строковое представление. Если value равно null, возвращает строку "Бесценно", иначе возвращает строку количества синапсов.
+- render(data: IProduct): HTMLElement - Заполняет элементы данными о продукте и возвращает корневой элемент 
+
+## Класс Card
+Расширяет класс ProductView и реализует интерфейс ICard. Представляет карточку товара.
+
+Конструктор:
+
+constructor(template: HTMLTemplateElement, events: IEvents, actions?: IActions)
+
+- template: HTMLTemplateElement - HTML-шаблон для создания структуры карточки товара.
+- events: IEvents - объект для управления событиями
+- actions: IActions (optional) - объект содержащий обработчики событий.
+
+### Поля:
+- _cardImage: HTMLImageElement - (protected) Элемент отображающий изображение товара. Получается из _element.
+- _cardCategory: HTMLElement - (protected) Элемент отображающий категорию товара. Получается из _element.
+- _cardDescription: Map<string, string> - (protected) Соответствие между текстовым названием категории и CSS-классом.
+
+### Методы:
+- private setCategory(value: string): void - Устанавливает CSS-класс для категории товара в зависимости от ее названия.
+- displayCard(data: IProduct): HTMLElement - Отображает информацию о продукте в карточке. Заполняет элементы данными о продукте и возвращает корневой элемент.
+
+## Класс CardPreview
+Расширяет класс Card. Представляет карточку товара для предпросмотра.
+
+Конструктор:
+
+constructor(template: HTMLTemplateElement, events: IEvents, actions?: IActions)
+
+- template: HTMLTemplateElement - HTML-шаблон для создания структуры карточки товара (предпросмотра).
+- events: IEvents - объект для управления событиями
+- actions: IActions (optional) - Объект, содержащий обработчики событий.
+
+### Поля:
+- text: HTMLElement - Элемент отображающий описание товара. 
+- _button: HTMLButtonElement - Кнопка для добавления товара в корзину. Подписывается на событие click, которое вызывает событие basket:itemAdd.
+
+### Методы:
+- private notSale(data: IProduct): string -  Определяет текст кнопки и ее состояние в зависимости от наличия цены у продукта. Если цена есть, возвращает текст "В корзину". Если цены нет, устанавливает атрибут disabled для кнопки и возвращает текст "Не продается".
+- displayPreview(data: IProduct): HTMLElement - Отображает информацию о продукте в карточке предпросмотра.  Заполняет элементы данными о продукте и возвращает корневой элемент.
 
 ## Класс BasketItem
-Реализует интерфейс IBasketItem. Представляет элемент корзины.
+Расширяет класс ProductView.  Представляет элемент товара в корзине.
 
 Конструктор:
 
 constructor(template: HTMLTemplateElement, events: IEvents, actions?: IActions)
 
-- template — HTML-шаблон элемента корзины.
-- events — объект управления событиями.
-- actions — объект с обработчиками событий (например, удаление товара).
+- template: HTMLTemplateElement - HTML-шаблон для создания элемента товара в корзине.
+- events: IEvents - объект для управления событиями.
+- actions: IActions (optional) - Объект, содержащий обработчики событий.
 
 ### Поля:
-- basketItem: HTMLElement — контейнер элемента корзины.
-- index: HTMLElement — индекс товара в списке.
-- title: HTMLElement — заголовок товара.
-- price: HTMLElement — цена товара.
-- buttonDelete: HTMLButtonElement — кнопка удаления товара из корзины.
+- index: HTMLElement - Элемент отображающий индекс товара в списке. 
+- _button: HTMLButtonElement - Кнопка для удаления товара из корзины. Если передан обработчик onClick в actions, подписывается на событие click этой кнопки.
 
 ### Методы:
-- displayBasketItem(data: IProduct, item: number): HTMLElement — заполняет элемент корзины данными о продукте и порядковым номером.
-- protected setPrice(value: number | null): string — возвращает строковое представление цены (бесценно если null).
-
-## Класс Order
-Реализует интерфейс IOrder. Представляет форму оформления заказа.
-
-Конструктор:
-
-constructor(template: HTMLTemplateElement, events: IEvents)
-
-- template — HTML-шаблон формы заказа.
-- events — объект управления событиями.
-
-### Поля:
-- orderForm: HTMLFormElement — форма заказа.
-- orderButtons: HTMLButtonElement[] — кнопки выбора способа оплаты.
-- buttonSubmit: HTMLButtonElement — кнопка подтверждения заказа.
-- formErrors: HTMLElement — контейнер для отображения ошибок валидации.
-
-### Методы:
-- displayOrder(): HTMLElement — отображает форму заказа.
-- get paymentChoice(): string — возвращает текущий выбранный способ оплаты.
-- setPaymentChoice(paymentMethod: string): void — устанавливает способ оплаты и выделяет соответствующую кнопку.
-- setValid(value: boolean): void — включает или отключает кнопку подтверждения заказа в зависимости от валидности формы.
+- displayBasketItem(data: IProduct, item: number): HTMLElement - Отображает информацию о товаре в элементе корзины. Устанавливает индекс товара и заполняет остальные элементы данными о товаре и возвращает корневой элемент.
 
 ## Класс ContactInfo
-Реализует интерфейс IContactInfo. Представляет форму для ввода контактных данных.
+Реализует интерфейс IContactInfo. Представляет визуальное отображение формы контактной информации.
 
 Конструктор:
 
 constructor(template: HTMLTemplateElement, events: IEvents)
 
-- template — HTML-шаблон формы контактов.
-- events — объект управления событиями.
+- template: HTMLTemplateElement - HTML-шаблон для создания структуры формы контактной информации.
+- events: IEvents - объект для управления событиями.
 
 ### Поля:
-- contactForm: HTMLFormElement — форма для ввода контактной информации.
-- contactInputs: HTMLInputElement[] — массив полей ввода.
-- contactButton: HTMLButtonElement — кнопка отправки формы.
-- contactFormErrors: HTMLElement — контейнер для отображения ошибок.
+- contactForm: HTMLFormElement - Элемент представляющий форму контактной информации. 
+- contactInputs: HTMLInputElement[] - Массив элементов представляющих поля ввода в форме. Подписывается на событие input для каждого поля, которое вызывает событие contacts:change с данными о поле и его значении.
+- contactButton: HTMLButtonElement - Элемент представляющий кнопку отправки формы. 
+- contactFormErrors: HTMLElement - Элемент отображающий ошибки валидации формы. 
+- contactForm: HTMLFormElement - Элемент представляющий форму контактной информации. 
+- contactInputs: HTMLInputElement[] - Массив элементов представляющих поля ввода в форме. Подписывается на событие input для каждого поля, которое вызывает событие contacts:change с данными о поле и его значении.
+- contactButton: HTMLButtonElement - Элемент представляющий кнопку отправки формы. Получается из contactForm.
+- contactFormErrors: HTMLElement - Элемент отображающий ошибки валидации формы. Получается из contactForm. Подписывается на событие submit, которое вызывает событие success:open.
 
 ### Методы:
-- displayContact(): HTMLElement — возвращает HTML-элемент формы контактов.
-- set valid(value: boolean) — устанавливает состояние кнопки отправки формы (disabled если форма невалидна).
+- setValid(value: boolean): void - Устанавливает атрибут disabled для кнопки отправки формы в зависимости от значения value. 
+- setFormErrors(value: string): void - Устанавливает текст для элемента contactFormErrors, отображающего ошибки валидации формы.
+- displayContact(): HTMLElement - Возвращает элемент contactForm.
 
-## Класс Success
-Реализует интерфейс ISuccess. Представляет сообщение об успешной оплате.
+## Класс Order
+Реализует интерфейс IOrder. Представляет визуальное отображение формы оформления заказа.
 
 Конструктор:
 
 constructor(template: HTMLTemplateElement, events: IEvents)
 
-- template — HTML-шаблон сообщения об успешном заказе.
-- events — объект управления событиями.
+- template: HTMLTemplateElement - HTML-шаблон для создания структуры формы оформления заказа.
+- events: IEvents - объект для управления событиями.
 
 ### Поля:
-- success: HTMLElement — основной элемент уведомления об успешном заказе.
-- successText: HTMLElement — текстовое описание заказа.
-- button: HTMLButtonElement — кнопка закрытия.
+- orderForm: HTMLFormElement - Элемент представляющий форму оформления заказа. 
+- orderButtons: HTMLButtonElement[] - Массив элементов представляющих кнопки выбора способа оплаты. Подписывается на событие click для каждой кнопки, которое вызывает метод setPaymentChoice с названием кнопки.
+- buttonSubmit: HTMLButtonElement - Элемент представляющий кнопку отправки заказа. 
+- formErrors: HTMLElement - Элемент отображающий ошибки валидации формы. 
+- orderForm: HTMLFormElement - Элемент представляющий форму оформления заказа. Подписывается на событие input, которое вызывает событие order:changeAddress с данными о поле и его значении. Подписывается на событие submit, которое вызывает событие contacts:open.
 
-### Метод:
-- displaySuccess(total: number): HTMLElement — устанавливает текст сообщения
-с суммой списания и возвращает элемент.
+### Методы:
+- setPaymentChoice(paymentMethod: string): void - Активирует кнопку выбранного способа оплаты и деактивирует остальные. Отправляет событие order:payment с выбранным способом оплаты.
+- setValid(value: boolean): void - Устанавливает атрибут disabled для кнопки отправки заказа в зависимости от значения value. Если value равно true, кнопка активна, иначе - заблокирована.
+- setFormErrors(errors: string): void - Устанавливает текст для элемента formErrors, отображающего ошибки валидации формы.
+- displayOrder(): HTMLElement - Возвращает элемент orderForm.
 
 ## Класс Modal
-Класс обеспечиваает функциональность модального 
-диалога. Он расширяет класс Component и предназначен для обработки 
-событий, связанных с модальными окнами, таких как открытие и закрытие модального окна,
-а также блокировка обертки страницы, когда модальное окно активно.
+Класс обеспечиваает функциональность модального диалога. Он расширяет класс Component и предназначен для обработки 
+событий, связанных с модальными окнами, таких как открытие и закрытие модального окна, а также блокировка обертки
+страницы, когда модальное окно активно.
 
 Конструктор:
 
-constructor(container: HTMLElement, protected events: IEvents)
+constructor(container: HTMLElement, events: IEvents)
 
-- container - Контейнер для модального окна.
-- events - Объект управления событиями.
+- container: HTMLElement - Элемент DOM, в котором будет отображаться модальное окно.
+- events: IEvents - Объект, реализующий интерфейс IEvents. Используется для подписки на события и их обработки.
 
 ### Поля:
-
-- protected _closeButton: HTMLButtonElement: Кнопка закрытия внутри модального окна.
-- protected _content: HTMLElement: Контент внутри модального окна.
-- protected _keyDownHandler: (event: KeyboardEvent) => void: Обработчик события keydown.
-- protected _pageWrapper: HTMLElement: Обертка страницы.
+- _closeButton: HTMLButtonElement - Кнопка закрытия модального окна. Подписывается на событие click, которое вызывает метод close.
+- _content: HTMLElement - Контейнер для отображения контента модального окна. 
+- _pageWrapper: HTMLElement - Элемент представляющий обертку страницы. Используется для блокировки прокрутки страницы при открытом модальном окне.
+- _keyDownHandler: (event: KeyboardEvent) => void -  Обработчик события keydown. Используется для закрытия модального окна при нажатии клавиши Escape.
+- locked: boolean - Свойство, определяющее, заблокирована ли прокрутка страницы при открытом модальном окне.
 
 ### Методы:
-
-- set content(value: HTMLElement) - Устанавливает контент модального окна.
-- open() - Открывает модальное окно и отправляет событие. Также добавляет обработчик события keydown
-- close() - Закрывает модальное окно, устанавливает контент в null и отправляет событие. Также удаляет обработчик события keydown
-- handleKeyDown(event: KeyboardEvent) - Обрабатывает событие keydown, чтобы закрыть модальное окно при нажатии клавиши Escape.
-- set locked(value: boolean) - Блокирует или разблокирует обертку страницы
-- render(): HTMLElement - Отображает модальное окно
+- set content(value: HTMLElement) - Устанавливает контент модального окна
+- open(): void - Открывает модальное окно. 
+- close(): void - Закрывает модальное окно. 
+- handleKeyDown(event: KeyboardEvent): void - Обработчик события keydown. Закрывает модальное окно при нажатии клавиши Escape.
+- set locked(value: boolean): void - Устанавливает блокировку прокрутки страницы. 
+- render(): HTMLElement - Переопределенный метод render класса Component. Открывает модальное окно (this.open()) и возвращает контейнер модального окна. Вызывает super.render() для выполнения базовой логики рендеринга
 
 # Prsenter
 
-## Открытие страницы:
+## Инициализация приложения:
 
-### Получение списка продуктов:
+### Создание экземпляров классов:
+- Создаются экземпляры классов ApiModel, EventEmitter, CardsModel, Modal, BasketModel, Basket, PayForm, Order, ContactInfo, Success, Header.
+- Определяются шаблоны для карточек, предпросмотра, корзины, элементов корзины, формы заказа, контактной информации и окна успеха.
 
-- Запрашивается список всех доступных продуктов через apiModel.getCardList().
-- Полученный массив данных сохраняется в модели cardsModel.productCards.
+## Загрузка и отображение карточек:
 
-### Отображение продукта:
+### Загрузка карточек:
+- При инициализации приложения запрашивается список карточек через apiModel.getCardList().
+- После успешной загрузки, полученные данные сохраняются в модели cardsModel.productCards.
+- При изменении данных в cardsModel.productCards (событие products:changed) происходит рендеринг карточек.
 
-- Событие products:obtain обрабатывается, и для каждого элемента массива productCards создается экземпляр класса Card.
-- Карточки добавляются в DOM в контейнер .gallery.
+### Рендеринг карточек:
+- Для каждого продукта из cardsModel.productCards создается экземпляр класса Card.
+- К каждой карточке прикрепляется обработчик события click, который вызывает событие product:select с данными о выбранном продукте.
+- Карточки добавляются в контейнер с классом .gallery.
 
-## Открытие карточки:
+## Открытие превью карточки (модальное окно):
 
 ### Выбор продукта:
+- При клике на карточку товара вызывается событие product:select.
+- В cardsModel.setPreview сохраняется выбранный товар и вызывается событие modalCard:open.
 
-- По клику на продукт вызывается событие product:select, которое передает выбранный элемент (IProduct)
-в обработчик события.
-- В модели cardsModel устанавливается выбранная карточка с помощью метода setPreview.
-
-### Модальное окно с карточкой:
-
-- Вызывается событие modalCard:open, которое создает объект CardPreview и отрисовывает карточку в модальном окне.
-- Модальное окно отображается методом modal.render().
+### Отображение модального окна с превью:
+- При получении события modalCard:open создается экземпляр класса CardPreview и в него передаются данные выбранного товара.
+- Содержимое модального окна (контент) заменяется на карточку предпросмотра cardPreview.displayPreview(item).
+- Модальное окно отображается вызовом modal.render().
 
 ## Добавление товара в корзину:
 
-### Нажатие кнопки "Добавить в корзину":
-
-- При событии basket:itemAdd добавляется текущий продукт в корзину через метод basketModel.addProductToBasket.
-- Обновляется счетчик количества товаров в корзине методом displayBasketCount.
-- Закрывается модальное окно.
+### Добавление товара из модального окна:
+- При клике на кнопку "Добавить в корзину" в модальном окне вызывается событие basket:itemAdd.
+- В модели basketModel товар добавляется в корзину с помощью метода addProductToBasket(cardsModel.clickedCard).
+- Обновляется счетчик товаров в шапке с помощью метода header.displayBasketCount(basketModel.basketCounter()).
+- Модальное окно закрывается вызовом modal.close().
 
 ## Удаление товара из корзины:
 
-### Нажатие кнопки удаления товара:
+### Удаление товара из корзины:
+- При клике на кнопку "Удалить" в элементе корзины вызывается событие basket:itemRemove с данными о товаре, который нужно удалить.
+- В модели basketModel товар удаляется из корзины с помощью метода removeProductToBasket(item).
+- Обновляется счетчик товаров в шапке header.displayBasketCount(basketModel.basketCounter()).
+- Обновляется отображение корзины через повторное открытие модального окна корзины (вызывается events.emit('basket:open')).
 
-- Через событие basket:itemRemove удаляется указанный товар из корзины с использованием метода removeProductToBasket.
-- Обновляется счетчик товаров в корзине и общая сумма заказа методами displayBasketCount и displayBasketSum.
-- Перезагружаются данные корзины через событие basket:open.
+## Открытие корзины (модальное окно):
 
-## Открытие корзины:
+### Обработка события basket:open:
+- При возникновении события basket:open перебираются все товары в корзине (basketModel.basketItems).
+- Для каждого товара создается экземпляр класса BasketItem.
+- Созданные элементы BasketItem добавляются в массив basketItemsElements.
+- Вычисляется и отображается общая сумма товаров в корзине с помощью метода basket.displayBasketSum(basketModel.totalPriceProducts()).
+- Обновляется контент модального окна с помощью метода basket.displayBasket(basketItemsElements).
+- Модальное окно отображается вызовом modal.render().
 
-### Показ корзины:
+## Открытие формы оформления заказа:
 
-- При событии basket:open вычисляется итоговая стоимость всех товаров в корзине через метод totalPriceProducts.
-- Отображаются все товары в корзине, создавая объекты BasketItem для каждой позиции.
-- Данные корзины отображаются в модальном окне с помощью метода displayBasket.
+### Обработка события order:open:
+- При возникновении события order:open контент модального окна заменяется формой оформления заказа, полученной из order.displayOrder().
+- Модальное окно отображается вызовом modal.render().
 
-## Оформление заказа:
+## Выбор способа оплаты:
 
-### Переход к оформлению заказа:
+### Обработка события order:payment:
+- При выборе способа оплаты вызывается событие order:payment с данными о выбранном способе оплаты (event.paymentMethod).
+- Устанавливается значение способа оплаты в модели payForm.payment = event.paymentMethod.
 
-- После нажатия на кнопку "Оформить заказ" в корзине открывается модальное окно с формой оплаты.
-- Передаются данные о заказе через свойство payForm.items.
+## Изменение адреса доставки:
 
-### Выбранный способ оплаты:
+### Обработка события order:changeAddress:
+- При изменении поля адреса вызывается событие order:changeAddress с данными о поле и его значении.
+- Вызывается метод payForm.setAddress(data.field, data.value) для сохранения введенного адреса и валидации формы.
 
-- При выборе способа оплаты через событие order:payment заполняются данные в форме оплаты.
+## Валидация формы и отображение ошибок:
 
-### Изменение адреса доставки:
+### Обработка события formErrors:changed:
+- При изменении ошибок в форме вызывается событие formErrors:changed с объектом ошибок (errors).
+- Из объекта errors извлекаются ошибки для адреса, способа оплаты, email и телефона.
+- На основании наличия ошибок устанавливается валидность кнопки отправки заказа (order.setValid(isOrderValid)) и кнопки отправки контактной информации (contacts.setValid(isContactValid)).
+- Формируются сообщения об ошибках для формы заказа (orderErrorMessages) и формы контактной информации (contactErrorMessages).
+- Отображаются сообщения об ошибках в соответствующих компонентах (order.setFormErrors(orderErrorMessages) и contacts.setFormErrors(contactErrorMessages)).
 
-- Пользователь вводит адрес через событие order:changeAddress. Поля формы проверяются на корректность ввода.
-- Если форма содержит ошибки, выводятся соответствующие сообщения в компоненте order.formErrors.
+## Открытие формы ввода контактной информации:
 
-### Проверка контактной информации:
+### Обработка события contacts:open:
+- При возникновении события contacts:open контент модального окна заменяется формой ввода контактной информации, полученной из contacts.displayContact().
+- Модальное окно отображается вызовом modal.render().
 
-- Контактные данные проверяются событием contacts:open.
-- Ошибки отображаются в компоненте contacts.contactFormErrors.
+## Изменение контактной информации:
 
-## Подтверждение заказа:
+### Обработка события contacts:change:
+- При изменении полей email или phone вызывается событие contacts:change с данными о поле и его значении.
+- Вызывается метод payForm.setContact(data.field, data.value) для сохранения введенных данных и валидации формы.
 
-### Отправка данных заказа:
+## Отправка данных и отображение окна успеха:
 
-- При успешном заполнении всех полей и нажатии на кнопку "Оплатить" отправляется POST-запрос через apiModel.postOrder.
-- В случае успешного выполнения очищаются данные корзины и форм.
+### Обработка события success:open:
+- При возникновении события success:open выполняется POST-запрос на сервер для отправки данных о заказе с помощью метода apiModel.postOrder(payForm.getPurchasedOrder()).
+- После успешной отправки данных контент модального окна заменяется окном успеха, полученным из success.displaySuccess(basketModel.totalPriceProducts()).
+- Корзина очищается с помощью метода basketModel.clearBasket().
+- Модальное окно отображается вызовом modal.render().
+- В случае ошибки при отправке данных, сообщение об ошибке выводится в консоль.
 
-### Окно успеха:
+## Закрытие окна успеха:
 
-- Открывается модальное окно с сообщением об успешной покупке через success.displaySuccess.
-- Окно успеха закрывается по событию success:close.
+### Обработка события success:close:
+- При возникновении события success:close модальное окно закрывается вызовом modal.close().
 
-## Блокировка прокрутки:
+## Блокировка и разблокировка прокрутки страницы:
 
-### Блокировка прокрутки при открытии модальных окон:
+### Блокировка прокрутки при открытии модального окна:
+- При возникновении события modal:open устанавливается modal.locked = true, что блокирует прокрутку страницы.
 
-- Когда модальные окна открываются, включается блокировка прокрутки через установку свойства locked у компонента modal.
-- Прокрутка разблокируется после закрытия модального окна.
+### Разблокировка прокрутки при закрытии модального окна:
+- При возникновении события modal:close устанавливается modal.locked = false, что разблокирует прокрутку страницы.

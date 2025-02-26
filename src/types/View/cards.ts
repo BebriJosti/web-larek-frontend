@@ -135,7 +135,7 @@ export class BasketItem extends ProductView {
 		this._button = this._element.querySelector('.basket__item-delete')
 
 		if (this.actions?.onClick) {
-			this._element.addEventListener('click', this.actions.onClick)
+			this._button.addEventListener('click', this.actions.onClick)
 		}
 	}
 
