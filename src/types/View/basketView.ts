@@ -7,12 +7,8 @@ interface IBasket {
 	basketList: HTMLElement
 	basketButton: HTMLButtonElement
 	basketPrice: HTMLElement
-	displayBasket():HTMLElement
+	displayBasket(items: HTMLElement[]):HTMLElement
 	displayBasketSum(sum: number): void
-
-	// basketHeaderCounter: HTMLElement
-	// basketHeaderButton: HTMLButtonElement
-	// displayBasketCount(value: number): void
 }
 
 export class Basket implements IBasket {
@@ -22,9 +18,6 @@ export class Basket implements IBasket {
 	basketButton: HTMLButtonElement
 	basketPrice: HTMLElement
 
-	// basketHeaderCounter: HTMLElement
-	// basketHeaderButton: HTMLButtonElement
-
 	constructor(template: HTMLTemplateElement, protected events: IEvents) {
 		this.basket = template.content.querySelector(".basket").cloneNode(true) as HTMLElement
 		this.basketTitle = this.basket.querySelector(".modal__title")
@@ -32,21 +25,12 @@ export class Basket implements IBasket {
 		this.basketPrice = this.basket.querySelector('.basket__price')
 		this.basketButton = this.basket.querySelector(".basket__button")
 
-		// this.basketHeaderCounter = document.querySelector(".header__basket-counter")
-		// this.basketHeaderButton = document.querySelector(".header__basket")
-		//
-		// this.basketHeaderButton.addEventListener('click', () => {
-		// 	this.events.emit('basket:open') })
-
 		this.basketButton.addEventListener('click', () => {
-			this.events.emit('order:open') })
-
-
-		this.basketItems = []
-
+			this.events.emit('order:open')
+		})
 	}
 
-	set basketItems(items: HTMLElement[]) {
+	displayBasket(items: HTMLElement[]) {
 		if (items.length) {
 			this.basketList.replaceChildren(...items)
 			this.basketButton.removeAttribute('disabled')
@@ -56,19 +40,11 @@ export class Basket implements IBasket {
 				textContent: 'Корзина пуста'
 			}))
 		}
+		this.basketTitle.textContent = 'Корзина'
+		return this.basket
 	}
-
-	// displayBasketCount(value: number) {
-	// 	this.basketHeaderCounter.textContent = `${value}`
-	// }
 
 	displayBasketSum(sum: number) {
 		this.basketPrice.textContent = `${sum} синапсов`
 	}
-
-	displayBasket() {
-		this.basketTitle.textContent = 'Корзина'
-		return this.basket
-	}
 }
-

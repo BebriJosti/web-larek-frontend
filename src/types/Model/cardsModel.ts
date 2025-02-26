@@ -19,7 +19,7 @@ export class CardsModel implements ICardsModel {
 
 	set productCards(arr: IProduct[]) {
 		this._productCards = arr
-		this.events.emit('products:obtain')
+		this.events.emit('products:changed', this._productCards)
 	}
 
 	setPreview(item: IProduct) {
@@ -27,3 +27,4 @@ export class CardsModel implements ICardsModel {
 		this.events.emit('modalCard:open', item)
 	}
 }
+

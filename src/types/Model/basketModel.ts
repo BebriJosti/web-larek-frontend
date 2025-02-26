@@ -1,4 +1,5 @@
 import { IProduct } from '../index';
+import { IEvents } from '../../components/base/events';
 
 interface IBasketModel {
 	basketItems: IProduct[]
@@ -12,22 +13,27 @@ interface IBasketModel {
 export class BasketModel implements IBasketModel {
 	protected _basketItems: IProduct[] = []
 
+	constructor(protected events: IEvents) {}
+
 	get basketItems() {
 		return this._basketItems
 	}
 
 	set basketItems(arr: IProduct[]) {
 		this._basketItems = arr
+		this.events.emit('basket:changed', this._basketItems)
 	}
 
 	addProductToBasket(data: IProduct) {
-		this._basketItems = [...this._basketItems, data];
+		this._basketItems = [...this._basketItems, data]
+		this.events.emit('basket:changed', this._basketItems)
 	}
 
 	removeProductToBasket(item: IProduct) {
 		const index = this._basketItems.findIndex(product => product.id === item.id)
 		if (index >= 0) {
 			this._basketItems.splice(index, 1)
+			this.events.emit('basket:changed', this._basketItems)
 		}
 	}
 
@@ -43,5 +49,6 @@ export class BasketModel implements IBasketModel {
 
 	clearBasket() {
 		this._basketItems = []
+		this.events.emit('basket:changed', this._basketItems)
 	}
 }

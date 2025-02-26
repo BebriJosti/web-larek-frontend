@@ -1,6 +1,6 @@
 import { IOrderForm } from '../index';
 import { IEvents } from '../../components/base/events';
-import { BasketModel } from './basket';
+import { BasketModel } from './basketModel';
 
 type FormErrors = Partial<Record<keyof IOrderForm, string>>
 
@@ -33,7 +33,7 @@ export class PayForm implements IPayForm {
 
 	setAddress(field: string, value: string) {
 		if (field !== 'address') {
-			return;
+			return
 		}
 
 		this.address = value
@@ -57,7 +57,7 @@ export class PayForm implements IPayForm {
 		}
 
 		this.formErrors = errors
-		this.emitFormErrors('address', this.formErrors)
+		this.events.emit('formErrors:changed', this.formErrors)
 		return Object.keys(errors).length === 0
 	}
 
@@ -91,7 +91,7 @@ export class PayForm implements IPayForm {
 		}
 
 		this.formErrors = errors
-		this.emitFormErrors('change', this.formErrors)
+		this.events.emit('formErrors:changed', this.formErrors)
 		return Object.keys(errors).length === 0
 	}
 
@@ -103,14 +103,10 @@ export class PayForm implements IPayForm {
 			address: this.address,
 			total: this.basket.totalPriceProducts(),
 			items: this.basket.basketItems.map(item => item.id),
-		};
+		}
 	}
 
 	private emitOrderReady() {
 		this.events.emit('order:ready', this.getPurchasedOrder())
-	}
-
-	private emitFormErrors(type: 'address' | 'change', errors: FormErrors) {
-		this.events.emit(`formErrors:${type}`, errors)
 	}
 }

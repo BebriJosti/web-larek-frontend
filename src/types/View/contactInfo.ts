@@ -6,6 +6,8 @@ interface IContactInfo {
 	contactButton: HTMLButtonElement
 	contactFormErrors: HTMLElement
 	displayContact(): HTMLElement
+	setValid(value:boolean): void
+	setFormErrors(value:string): void
 }
 
 export class ContactInfo implements  IContactInfo {
@@ -34,9 +36,12 @@ export class ContactInfo implements  IContactInfo {
 			this.events.emit('success:open')
 		})
 	}
-
-	set valid(value: boolean) {
+	setValid(value: boolean) {
 		this.contactButton.disabled = !value
+	}
+
+	setFormErrors(value: string) {
+		this.contactFormErrors.textContent = value
 	}
 
 	displayContact() {

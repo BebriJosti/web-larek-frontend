@@ -1,16 +1,16 @@
 import { IEvents } from '../../components/base/events';
 
 interface IOrder  {
-	 orderForm: HTMLFormElement
-	 orderButtons: HTMLButtonElement[]
-	 displayOrder(): HTMLElement
-	 setPaymentChoice(paymentMethod: string): void
-	 setValid(value: boolean): void
-	 setFormErrors(errors: string): void
+	orderForm: HTMLFormElement
+	orderButtons: HTMLButtonElement[]
+	displayOrder(): HTMLElement
+	setPaymentChoice(paymentMethod: string): void
+	setValid(value: boolean): void
+	setFormErrors(errors: string): void
 }
 
 export class Order implements IOrder {
-	orderForm: HTMLFormElement;
+	orderForm: HTMLFormElement
 	orderButtons: HTMLButtonElement[]
 	buttonSubmit: HTMLButtonElement
 	formErrors: HTMLElement
@@ -25,9 +25,8 @@ export class Order implements IOrder {
 		this.orderButtons.forEach(item => {
 			item.addEventListener('click', () => {
 				this.setPaymentChoice(item.name)
-				events.emit('order:payment', item)
-			});
-		});
+			})
+		})
 
 		this.orderForm.addEventListener('input', (event: Event) => {
 			const target = event.target as HTMLInputElement
@@ -45,7 +44,8 @@ export class Order implements IOrder {
 	setPaymentChoice(paymentMethod: string) {
 		this.orderButtons.forEach(item => {
 			item.classList.toggle('button_alt-active', item.name === paymentMethod)
-		});
+		})
+		this.events.emit('order:payment', {paymentMethod})
 	}
 
 	setValid(value: boolean) {

@@ -90,6 +90,19 @@ yarn build
 - basketCounter(): number
 - totalPriceProducts(): number
 
+## Интерфейс IHeader
+Определяет структуру и методы для компонента шапки, необходимые для взаимодействия 
+с элементами корзины
+
+### Поля:
+
+- basketHeaderButton: HTMLButtonElement - кнопка в шапке которая открывает корзину
+- basketHeaderCounter: HTMLElement - элемент отображающий количество товаров в корзине
+
+### Метод:
+
+- displayBasketCount(value: number): void - обновляет счетчик корзины отображая заданное значение
+
 ## Интерфейс ICard
 Определяет структуру карточки продукта.
 
@@ -110,16 +123,13 @@ yarn build
 - basketList: HTMLElement — список товаров в корзине.
 - basketButton: HTMLButtonElement — кнопка оформления заказа.
 - basketPrice: HTMLElement — элемент с суммой заказа.
-- basketHeaderCounter: HTMLElement — счётчик товаров в заголовке корзины.
-- basketHeaderButton: HTMLButtonElement — кнопка открытия корзины.
 
 ### Методы:
 - displayBasket(): HTMLElement — отображает корзину.
-- displayBasketCount(value: number): void — обновляет счётчик товаров в корзине.
 - displayBasketSum(sum: number): void — обновляет сумму заказа.
 
 ## Интерфейс IBasketItem
-Определяет структуру элемента корзины.
+ Описывает структуру и методы, необходимые для управления корзиной товаров.
 
 ### Поля:
 - basketItem: HTMLElement — контейнер элемента корзины.
@@ -158,7 +168,7 @@ yarn build
 ## Интерфейс ISuccess
 Определяет структуру успешного завершения заказа.
 
-### Свойства:
+### Поля:
 - success: HTMLElement — контейнер сообщения об успешном заказе.
 - successText: HTMLElement — текстовое описание успешного заказа.
 - button: HTMLButtonElement — кнопка закрытия.
@@ -273,6 +283,23 @@ constructor(protected events: IEvents, protected basket: BasketModel)
 - getPurchasedOrder(): object - возвращает объект данных пользователя с выбранными товарами
 
 # View:
+
+## Header
+Реализует интерфейса IHeader.  Представляет кнопку корзины и счетчик в шапке
+Конструктор:
+
+constructor(protected events:IEvents)
+
+- events — объект управления событиями.
+
+### Поля:
+
+- basketHeaderButton: HTMLButtonElement - кнопка в шапке которая открывает корзину
+- basketHeaderCounter: HTMLElement - элемент отображающий количество товаров в корзине
+
+### Метод:
+
+- displayBasketCount(value: number): void - обновляет счетчик корзины отображая заданное значение
 
 ## Card
 Реализует интерфейс ICard. Представляет базовую карточку товара.
@@ -468,7 +495,7 @@ constructor(container: HTMLElement, protected events: IEvents)
 
 ### Нажатие кнопки "Добавить в корзину":
 
-- При событии basket:add добавляется текущий продукт в корзину через метод basketModel.addProductToBasket.
+- При событии basket:itemAdd добавляется текущий продукт в корзину через метод basketModel.addProductToBasket.
 - Обновляется счетчик количества товаров в корзине методом displayBasketCount.
 - Закрывается модальное окно.
 
