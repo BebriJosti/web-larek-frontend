@@ -567,6 +567,7 @@ constructor(container: HTMLElement, events: IEvents)
 - пПользователь выбирает способ оплаты, что вызывает событие 'orderPayment:request'.
 - Способ оплаты сохраняется в модели payForm с помощью метода setPayment.
 - В интерфейсе заказа отображается выбранный способ оплаты с помощью метода order.setPaymentChoice.
+- Выполняется валидация формы заказа с помощью метода payForm.validateOrder.
 
 ## Изменение адреса доставки:
 

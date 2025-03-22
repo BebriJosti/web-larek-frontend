@@ -101,6 +101,7 @@ events.on('orderPayment:request', (event:{payment:string}) => {
 
 events.on('orderPayment:changed', (data:{payment:string}) => {
 	order.setPaymentChoice(data.payment)
+	payForm.validateOrder()
 })
 
 events.on('orderAddress:request', (data:{field:string, value:string}) => {
@@ -108,7 +109,7 @@ payForm.setAddress(data.value)
 })
 
 events.on('orderAddress:changed', () => {
-	payForm.validateOrder();
+	payForm.validateOrder()
 })
 
 events.on('formErrors:changed', (errors: Partial<IOrderForm>) => {

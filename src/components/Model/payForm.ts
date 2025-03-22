@@ -105,6 +105,5 @@ export class PayForm implements IPayForm {
 		this.phone = ''
 		this.address = ''
 		this.events.emit('clearOrderForm')
-		console.log(this)
 	}
 }
