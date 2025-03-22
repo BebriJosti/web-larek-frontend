@@ -1,9 +1,6 @@
-import { IEvents } from '../../components/base/events';
+import { IEvents } from '../base/events';
 
 interface ISuccess {
-	success: HTMLElement
-	successText: HTMLElement
-	button: HTMLButtonElement
 	displaySuccess(total: number): HTMLElement
 }
 

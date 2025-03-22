@@ -1,5 +1,5 @@
-import { IProduct } from '../index';
-import { IEvents } from '../../components/base/events';
+import { IProduct } from '../../types';
+import { IEvents } from '../base/events';
 
 interface IBasketModel {
 	basketItems: IProduct[]
@@ -25,9 +25,11 @@ export class BasketModel implements IBasketModel {
 	}
 
 	addProductToBasket(data: IProduct) {
+		const basketDuplicate = this._basketItems.some(item => item.id === data.id);
+		if (!basketDuplicate) {
 		this._basketItems = [...this._basketItems, data]
 		this.events.emit('basket:changed', this._basketItems)
-	}
+	}}
 
 	removeProductToBasket(item: IProduct) {
 		const index = this._basketItems.findIndex(product => product.id === item.id)

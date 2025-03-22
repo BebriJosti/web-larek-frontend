@@ -1,5 +1,5 @@
-import { IProduct } from '../index';
-import { IEvents } from '../../components/base/events';
+import { IProduct } from '../../types';
+import { IEvents } from '../base/events';
 
 export interface ICardsModel {
 	productCards: IProduct[]

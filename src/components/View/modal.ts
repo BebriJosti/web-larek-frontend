@@ -1,6 +1,6 @@
-import { IEvents } from '../../components/base/events'
+import { IEvents } from '../base/events'
 import { ensureElement } from '../../utils/utils'
-import { Component } from '../../components/base/component'
+import { Component } from '../base/component'
 
 export interface IModalData {
 	content: HTMLElement
@@ -42,7 +42,6 @@ export class Modal extends Component<IModalData> {
 		this.events.emit('modal:close')
 
 		document.removeEventListener('keydown', this._keyDownHandler)
-		console.log('1')
 	}
 
 	handleKeyDown(event: KeyboardEvent) {

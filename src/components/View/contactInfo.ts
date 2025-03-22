@@ -1,10 +1,6 @@
-import { IEvents } from '../../components/base/events';
+import { IEvents } from '../base/events';
 
 interface IContactInfo {
-	contactForm: HTMLFormElement
-	contactInputs: HTMLInputElement[]
-	contactButton: HTMLButtonElement
-	contactFormErrors: HTMLElement
 	displayContact(): HTMLElement
 	setValid(value:boolean): void
 	setFormErrors(value:string): void
@@ -27,13 +23,13 @@ export class ContactInfo implements  IContactInfo {
 				const target = event.target as HTMLInputElement
 				const field = target.name
 				const value = target.value
-				this.events.emit(`contacts:change`, { field, value })
+				this.events.emit(`contacts:request`, { field, value })
 			})
 		})
 
 		this.contactForm.addEventListener('submit', (event: Event) => {
 			event.preventDefault()
-			this.events.emit('success:open')
+			this.events.emit('contacts:submit')
 		})
 	}
 	setValid(value: boolean) {
@@ -44,7 +40,14 @@ export class ContactInfo implements  IContactInfo {
 		this.contactFormErrors.textContent = value
 	}
 
+	clearContact() {
+		this.contactInputs.forEach(input => {
+			input.value = ''
+		})
+	}
+
 	displayContact() {
+		this.contactButton.setAttribute('disabled', '')
 		return this.contactForm
 	}
 }

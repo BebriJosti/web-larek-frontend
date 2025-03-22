@@ -1,8 +1,6 @@
-import { IEvents } from '../../components/base/events';
+import { IEvents } from '../base/events';
 
-interface IOrder  {
-	orderForm: HTMLFormElement
-	orderButtons: HTMLButtonElement[]
+interface IOrder {
 	displayOrder(): HTMLElement
 	setPaymentChoice(paymentMethod: string): void
 	setValid(value: boolean): void
@@ -14,29 +12,30 @@ export class Order implements IOrder {
 	orderButtons: HTMLButtonElement[]
 	buttonSubmit: HTMLButtonElement
 	formErrors: HTMLElement
-
+	orderInput:HTMLInputElement
 
 	constructor(template: HTMLTemplateElement, protected events: IEvents) {
 		this.orderForm = template.content.querySelector('.form').cloneNode(true) as HTMLFormElement
 		this.orderButtons = Array.from(this.orderForm.querySelectorAll('.button_alt'))
 		this.buttonSubmit = this.orderForm.querySelector('.order__button')
 		this.formErrors = this.orderForm.querySelector('.form__errors')
+		this.orderInput = this.orderForm.querySelector('.form__input')
 
 		this.orderButtons.forEach(item => {
 			item.addEventListener('click', () => {
-				this.setPaymentChoice(item.name)
+				this.events.emit('orderPayment:request', {payment: item.name})
 			})
 		})
 
-		this.orderForm.addEventListener('input', (event: Event) => {
-			const target = event.target as HTMLInputElement
+		this.orderInput.addEventListener('input', (evt: Event) => {
+			const target = evt.target as HTMLInputElement
 			const field = target.name
 			const value = target.value
-			this.events.emit('order:changeAddress', { field, value })
+			this.events.emit('orderAddress:request', { field, value })
 		})
 
-		this.orderForm.addEventListener('submit', (event: Event) => {
-			event.preventDefault()
+		this.orderForm.addEventListener('submit', (evt: Event) => {
+			evt.preventDefault()
 			this.events.emit('contacts:open')
 		})
 	}
@@ -45,7 +44,6 @@ export class Order implements IOrder {
 		this.orderButtons.forEach(item => {
 			item.classList.toggle('button_alt-active', item.name === paymentMethod)
 		})
-		this.events.emit('order:payment', {paymentMethod})
 	}
 
 	setValid(value: boolean) {
@@ -56,7 +54,13 @@ export class Order implements IOrder {
 		this.formErrors.textContent = errors
 	}
 
+	clearOrder() {
+		this.orderInput.value = ''
+		this.orderButtons.forEach(button => {
+			button.classList.remove('button_alt-active')
+		})
+	}
 	displayOrder() {
-		return this.orderForm
+		return this.orderForm;
 	}
 }

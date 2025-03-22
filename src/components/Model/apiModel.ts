@@ -1,5 +1,5 @@
-import { Api, ApiListResponse } from '../../components/base/api'
-import { IOrderForm, IOrderResult, IProduct } from '../index';
+import { Api, ApiListResponse } from '../base/api'
+import { IOrder, IOrderResult, IProduct } from '../../types';
 
 interface IApiModel {
 	getCardList: () => Promise<IProduct[]>
@@ -28,7 +28,7 @@ interface IApiModel {
 		}))
 	}
 
-	async postOrder(order: IOrderForm): Promise<IOrderResult> {
+	async postOrder(order: IOrder): Promise<IOrderResult> {
 		try {
 			const res = await this.post('/order', order) as IOrderResult
 			return res

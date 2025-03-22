@@ -1,28 +1,5 @@
-import { IEvents } from '../../components/base/events';
-import { IActions, IProduct } from '../index';
-
-interface IHeader {
-	basketHeaderButton: HTMLButtonElement
-	basketHeaderCounter: HTMLElement
-	displayBasketCount(value: number): void
-}
-
-export class Header implements IHeader {
-	basketHeaderButton: HTMLButtonElement
-	basketHeaderCounter: HTMLElement
-
-	constructor(protected events: IEvents) {
-		this.basketHeaderCounter = document.querySelector(".header__basket-counter")
-		this.basketHeaderButton = document.querySelector(".header__basket")
-		this.basketHeaderButton.addEventListener('click', () => {
-			this.events.emit('basket:open')
-		})
-	}
-
-	displayBasketCount(value: number) {
-		this.basketHeaderCounter.textContent = `${value}`
-	}
-}
+import { IEvents } from '../base/events';
+import { IActions, IProduct } from '../../types';
 
 class ProductView {
 	protected _element: HTMLElement
@@ -108,19 +85,23 @@ export class CardPreview extends Card {
 		}
 	}
 
-	private notSale(data: IProduct): string {
-		if (data.price) {
+	private notSale(data: IProduct, basketDuplicate: boolean): string {
+		if (basketDuplicate) {
+			this._button.setAttribute('disabled', '')
+			return 'В корзине'
+		} else if (data.price) {
+			this._button.removeAttribute('disabled')
 			return 'В корзину'
 		} else {
-			(this._button).setAttribute('disabled', '')
+			this._button.setAttribute('disabled', '')
 			return 'Не продается'
 		}
 	}
 
-	displayPreview(data: IProduct): HTMLElement {
+	displayPreview(data: IProduct, basketDuplicate:boolean): HTMLElement {
 		super.displayCard(data)
 		this.text.textContent = data.description;
-		(this._button).textContent = this.notSale(data)
+		(this._button).textContent = this.notSale(data, basketDuplicate)
 		return this._element
 	}
 }

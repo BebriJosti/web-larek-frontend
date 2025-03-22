@@ -1,14 +1,10 @@
-import { IEvents } from '../../components/base/events';
+import { IEvents } from '../base/events';
 import { createElement } from '../../utils/utils';
 
 interface IBasket {
-	basket: HTMLElement
-	basketTitle: HTMLElement
-	basketList: HTMLElement
-	basketButton: HTMLButtonElement
-	basketPrice: HTMLElement
 	displayBasket(items: HTMLElement[]):HTMLElement
 	displayBasketSum(sum: number): void
+	getBasketContent(): HTMLElement
 }
 
 export class Basket implements IBasket {
@@ -46,5 +42,9 @@ export class Basket implements IBasket {
 
 	displayBasketSum(sum: number) {
 		this.basketPrice.textContent = `${sum} синапсов`
+	}
+
+	getBasketContent(): HTMLElement {
+		return this.basket
 	}
 }
